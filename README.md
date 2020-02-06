@@ -2,7 +2,7 @@
 
 ![](https://i.imgur.com/mjrLYDv.png)
 
-## [Specifications](https://www.eurobot.org/images/2020/Eurobot2020_Rules_Cup_BETA_EN.pdf)
+## [Specifications](https://www.eurobot.org/images/2020/Eurobot2020_Rules_Cup_OFFICIAL_EN.pdf)
 
 ### Robot dimensions
 
