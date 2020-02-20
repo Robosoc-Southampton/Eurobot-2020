@@ -6,7 +6,7 @@ from worldmodel.position import BoardPosition
 
 class CupColour(Enum):
 	GREEN = 0
-	ORANGE = 1
+	RED = 1
 
 
 class CupModel:
@@ -22,7 +22,7 @@ class RobotModel:
 
 
 class VisionModel:
-	def __init__(self, cups: List[CupModel], robots: List[RobotModel], side: CupColour):
+	def __init__(self, cups: List[CupModel] = [], robots: List[RobotModel] = [], side: CupColour):
 		self.cups = cups # list of cups detected
 		self.robots = robots # list of robots detected
 		self.side = side # side of the board we're playing on
