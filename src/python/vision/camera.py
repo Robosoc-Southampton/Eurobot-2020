@@ -27,4 +27,7 @@ class VisionCamera(PiCamera):
         return robots
 
     def videoStreamObjects(self):
-        pass
+        stream = PiRGBArray(self, size=self.resolution)
+        for frame in self.capture_continuous(stream, format='bgr', use_video_port=True):
+            yield (cupsInFrame(frame), robotsInFrame(frame))
+            stream.truncate(0)
