@@ -13,8 +13,11 @@ class ImageProcessor(Thread):
 
     def run(self):
         # get object positions for robots, cups, etc. from the video stream
-        while objects := self.camera.videoStreamObjects():
+        for objectUpdate in self.camera.videoStreamObjects():
             # do stuff with the data (altering self.vision ?)
+            # self.vision is passed by src/python/main.py and can be accessed easily from there
+            # positions will be used for path finding etc.
+            # objectUpdate: Tuple[List[CupModel], List[RobotModel]]
             pass
 
 # start necessary background threads that process images
