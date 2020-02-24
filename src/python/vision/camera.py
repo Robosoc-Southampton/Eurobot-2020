@@ -1,14 +1,49 @@
 
+from typing import Tuple
+
 from picamera import PiCamera
 from picamera.array import PiRGBArray
-from typing import Tuple
+from math import sqrt
+import cv2, numpy as np
+from cv2 import aruco
+
 from model import CupModel, RobotModel
+from detectors import ArucoDetector, CupDetector
 
 Resolution = Tuple[int, int]
 
 class VisionCamera(PiCamera):
     def __init__(self, resolution: Resolution, framerate: int):
         super().__init__(resolution=resolution, framerate=framerate)
+        self.aruco_detector = ArucoDetector()
+        self.cup_detector = CupDetector()
+        self.unwarp = None
+
+    def detectUnwarp(self):
+        with PiRGBArray(self, size=self.resolution) as frame:
+            self.capture(frame, format='bgr')
+            img = frame.array
+
+        board_marker = self.aruco_detector.findBoardMarker(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
+        if board_marker:
+            print('(camera) - board marker detected')
+            br, bl, tl, tr = board_marker[0].tolist()
+            side = br[0] - bl[0]
+            # side = math.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
+
+            dst = np.array([
+                [*tl],
+                [tl[0] + side, tl[1]],
+                [tl[0] + side, tl[1] + side],
+                [tl[0], tl[1] + side]
+            ], dtype = "float32")
+
+            unwarp = cv2.getPerspectiveTransform(board_marker, dst)
+            self.unwarp = unwarp
+            print('(camera) - unwarp calculated and set')
+        else:
+            print('(camera) - *board marker not found')
+
 
     def cupsInFrame(self, frame: PiRGBArray) -> List[CupModel]:
         cups = []
