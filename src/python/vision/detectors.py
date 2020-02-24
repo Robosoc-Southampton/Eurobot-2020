@@ -36,6 +36,7 @@ class ArucoDetector:
 class CupDetector:
     DEFAULT_COLOUR_RANGES = { ((67, 50, 0), (87, 255, 255)): CupColour(0),
                               ((170, 50, 50), (180, 255, 255)): CupColour(1) }
+    CUP_DIAMETER = 72
 
     def __init__(self, colour_ranges: Dict[CupSpecification, CupColour] = DEFAULT_COLOUR_RANGES):
         self.colour_ranges = colour_ranges
@@ -50,7 +51,7 @@ class CupDetector:
         kernel = np.ones((9,9), np.uint8)
         return cv2.morphologyEx(red_mask_t, cv2.MORPH_CLOSE, kernel)
 
-    def positions(self, img, unwarp):
+    def positions(self, img, unwarp, correction=self.CUP_DIAMETER//2):
         cups = []
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 

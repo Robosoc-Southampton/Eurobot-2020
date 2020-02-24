@@ -31,6 +31,7 @@ class VisionCamera(PiCamera):
             side = br[0] - bl[0]
             # side = math.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
 
+            # NOTE: NEED REAL-WORLD MARKER DIMENSIONS FOR PROPER BOARD POSITION CALC
             dst = np.array([
                 [*tl],
                 [tl[0] + side, tl[1]],
