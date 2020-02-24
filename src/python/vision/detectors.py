@@ -15,7 +15,6 @@ class ArucoDetector:
 
     def findRects(self, imgbw):
         aruco_rects = {}
-        imgbw = cv2.cvtColor(frame.array, cv2.COLOR_BGR2GRAY)
         corners, ids, rejected = aruco.detectMarkers(imgbw, self.aruco_dict, parameters=self.parameters)
         for i in range(len(ids)):
             if ids[i][0] in aruco_rects:
@@ -26,11 +25,11 @@ class ArucoDetector:
         return aruco_rects
 
     def findRectListById(self, imgbw, aruco_id):
-        aruco_rects = self.findRects(img)
+        aruco_rects = self.findRects(imgbw)
         return aruco_rects[aruco_id] if aruco_id in aruco_rects else None
 
     def findBoardMarker(self, imgbw):
-        board_marker = self.findRectListById(self.BOARD_MARKER_ID)
+        board_marker = self.findRectListById(imgbw, self.BOARD_MARKER_ID)
         return board_marker[0] if board_marker else None
 
 class CupDetector:
