@@ -51,7 +51,7 @@ class CupDetector:
         kernel = np.ones((9,9), np.uint8)
         return cv2.morphologyEx(red_mask_t, cv2.MORPH_CLOSE, kernel)
 
-    def positions(self, img, unwarp, board_marker_side, correction=(0, CUP_DIAMETER//2)):
+    def positions(self, img, unwarp, board_marker_side, correction=(0, -CUP_DIAMETER//2)):
         cups = []
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
@@ -71,7 +71,8 @@ class CupDetector:
                     unwarped_point = cv2.perspectiveTransform(retc_point, unwarp)
                     size_scale = board_marker_side/MARKER_SIDE
                     actual_position = (unwarped_point[0]*size_scale, unwarped_point[1]*size_scale)
+                    corrected_position = (actual_position[0]+correction[0], actual_position[1]+correction[1])
 
-                    cups.append(CupModel(colour, BoardPosition(*actual_position)))
+                    cups.append(CupModel(colour, BoardPosition(*corrected_position)))
 
         return cups
