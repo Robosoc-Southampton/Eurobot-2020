@@ -36,6 +36,7 @@ class CupDetector:
     DEFAULT_COLOUR_RANGES = { ((67, 50, 0), (87, 255, 255)): CupColour(0),
                               ((170, 50, 50), (180, 255, 255)): CupColour(1) }
     CUP_DIAMETER = 72
+    MARKER_SIDE = 100
 
     def __init__(self, colour_ranges: Dict[CupSpecification, CupColour] = DEFAULT_COLOUR_RANGES):
         self.colour_ranges = colour_ranges
@@ -50,7 +51,7 @@ class CupDetector:
         kernel = np.ones((9,9), np.uint8)
         return cv2.morphologyEx(red_mask_t, cv2.MORPH_CLOSE, kernel)
 
-    def positions(self, img, unwarp, correction=CUP_DIAMETER//2):
+    def positions(self, img, unwarp, board_marker_side, correction=(0, CUP_DIAMETER//2)):
         cups = []
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
@@ -65,7 +66,12 @@ class CupDetector:
             for c in cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE):
                 if 1000 < cv2.contourArea(c):
                     rect = cv2.boundingRect(c)
-                    # must be unwarped and adjusted
-                    # cups.append(CupModel(colour, BoardPosition(rect[0]+rect[2]/2, rect[1]+rect[3])))
+                    rect_point = (rect[0]+rect[2]/2, rect[1]+rect[3])
+
+                    unwarped_point = cv2.perspectiveTransform(retc_point, unwarp)
+                    size_scale = board_marker_side/MARKER_SIDE
+                    actual_position = (unwarped_point[0]*size_scale, unwarped_point[1]*size_scale)
+
+                    cups.append(CupModel(colour, BoardPosition(*actual_position)))
 
         return cups

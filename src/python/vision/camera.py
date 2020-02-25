@@ -17,7 +17,7 @@ class VisionCamera(PiCamera):
         super().__init__(resolution=resolution, framerate=framerate)
         self.aruco_detector = ArucoDetector()
         self.cup_detector = CupDetector()
-        self.board_marker = None
+        self.board_marker_side = None
         self.unwarp = None
 
     def detectUnwarp(self):
@@ -42,7 +42,7 @@ class VisionCamera(PiCamera):
             ], dtype = "float32")
 
             unwarp = cv2.getPerspectiveTransform(board_marker, dst)
-            self.board_marker = dst
+            self.board_marker_side = side
             self.unwarp = unwarp
             print('(camera) - unwarp calculated and set')
         else:
