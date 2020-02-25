@@ -22,7 +22,7 @@ class RobotModel:
 
 
 class VisionModel:
-    def __init__(self, cups: List[CupModel] = [], robots: List[RobotModel] = [], side: CupColour):
+    def __init__(self,  side: CupColour, cups: List[CupModel] = [], robots: List[RobotModel] = []):
         self.cups = cups # list of cups detected
         self.robots = robots # list of robots detected
         self.side = side # side of the board we're playing on

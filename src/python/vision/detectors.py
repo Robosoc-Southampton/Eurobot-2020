@@ -1,10 +1,10 @@
 
 from typing import Tuple, Dict
-from model import CupColour, CupModel, RobotModel
+from vision.model import CupColour, CupModel, RobotModel
 from worldmodel.position import BoardPosition
 import cv2, numpy as np
 
-CupSpecification = Tuple(Tuple(int, int, int), Tuple(int, int, int))
+CupSpecification = Tuple[Tuple[int, int, int], Tuple[int, int, int]]
 
 class ArucoDetector:
     BOARD_MARKER_ID = 42
@@ -50,7 +50,7 @@ class CupDetector:
         kernel = np.ones((9,9), np.uint8)
         return cv2.morphologyEx(red_mask_t, cv2.MORPH_CLOSE, kernel)
 
-    def positions(self, img, unwarp, correction=self.CUP_DIAMETER//2):
+    def positions(self, img, unwarp, correction=CUP_DIAMETER//2):
         cups = []
         hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 

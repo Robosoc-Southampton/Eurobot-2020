@@ -1,5 +1,5 @@
 
-from typing import Tuple
+from typing import Tuple, List
 
 from picamera import PiCamera
 from picamera.array import PiRGBArray
@@ -7,8 +7,8 @@ from math import sqrt
 import cv2, numpy as np
 from cv2 import aruco
 
-from model import CupModel, RobotModel
-from detectors import ArucoDetector, CupDetector
+from vision.model import CupModel, RobotModel
+from vision.detectors import ArucoDetector, CupDetector
 
 Resolution = Tuple[int, int]
 
@@ -65,7 +65,7 @@ class VisionCamera(PiCamera):
     def videoStreamObjects(self):
         stream = PiRGBArray(self, size=self.resolution)
         for frame in self.capture_continuous(stream, format='bgr', use_video_port=True):
-            yield (frame, cupsInFrame(frame), robotsInFrame(frame))
+            yield (frame, self.cupsInFrame(frame), self.robotsInFrame(frame))
             stream.truncate(0)
 
     def videoStream(self):

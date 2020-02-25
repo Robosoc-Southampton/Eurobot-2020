@@ -1,8 +1,8 @@
 
 from time import sleep
 from threading import Thread
-from camera import VisionCamera
-from model import VisionModel
+from vision.camera import VisionCamera
+from vision.model import VisionModel
 
 
 class ImageProcessor(Thread):
